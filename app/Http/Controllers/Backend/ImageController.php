@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers\Backend;
 
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Models\Gallery\Image;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImageRequest;
+use App\Http\Services\FileService;
+use App\Http\Services\ImageService;
 
 class ImageController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+    public function __construct(private FileService $fileService, private ImageService $imageService)
+    {
+
+    }
     public function index()
     {
         return view('backend.image.index', [
-            'images' => Image::latest()->get(
-                ['id', 'name', 'slug', 'description', 'file', 'created_at']
-            )
+            'images' => $this->imageService->select(10),
         ]);
     }
 
@@ -32,23 +35,18 @@ class ImageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ImageRequest $request)
     {
-        $data = $request->validate([
-            'name' => 'required|min:3',
-            'description' => 'required|min:3',
-            'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|mimetypes:image/jpeg,image/png,image/jpg,image/gif,image/svg|max:2048'
-        ]);
+        $data = $request->validated();
 
         try {
-            $data['file'] = $request->file('file')->store('images', 'public');
+            $data['file'] = 'images/' . $this->fileService->upload($request->file('file'), 'images');
 
-            $data['uuid'] = Str::uuid();
-            $data['slug'] = Str::slug($data['name']);
-            Image::create($data);
+            $this->imageService->create($data);
 
             return redirect()->route('panel.image.index')->with('success', 'Image created successfully');
         } catch (\Exception $error) {
+            $this->fileService->delete($data['file'], 'images');
             return redirect()->back()->with('error', $error->getMessage());
         }
     }
@@ -56,32 +54,66 @@ class ImageController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $uuid)
     {
-        //
+        return view('backend.image.show', [
+            'image' => $this->imageService->selectFirstBy('uuid', $uuid)
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $uuid)
     {
-        //
+        return view('backend.image.edit', [
+            'image' => $this->imageService->selectFirstBy('uuid', $uuid),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ImageRequest $request, string $uuid)
     {
-        //
+        $data = $request->validated();
+
+        $image = $this->imageService->selectFirstBy('uuid', $uuid);
+
+        try {
+            if ($request->hasFile('file')) {
+                // Hapus file gambar lama
+                $this->fileService->delete($image->file, 'images');
+
+                // Lalu Upload file gambar baru
+                $data['file'] = 'images/' . $this->fileService->upload($request->file('file'), 'images');
+            }
+            else {
+                // jika tidak upload
+                $data['file'] = $image->file;
+            }
+
+            // Update data
+            $this->imageService->update($uuid, $data);
+
+            return redirect()->route('panel.image.index')->with('success', 'Image updated successfully');
+        } catch (\Exception $error) {
+
+            $this->fileService->delete($data['file'], 'images');
+
+            return redirect()->back()->with('error', $error->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $uuid)
     {
-        //
+        $image = $this->imageService->selectFirstBy('uuid', $uuid);
+        $this->fileService->delete($image->file, 'images');
+        $image->delete();
+
+        return response()->json(['message' => 'Image deleted successfully']);
     }
 }

@@ -1,4 +1,4 @@
-    <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
+    <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none" aria-label="Tertiary navigation">
         <a class="navbar-brand me-lg-5" href="{{ asset('backend') }}/index.html">
             <img class="navbar-brand-dark" src="{{ asset('backend') }}/assets/img/brand/light.svg" alt="Volt logo" />
             <img class="navbar-brand-light" src="{{ asset('backend') }}/assets/img/brand/dark.svg" alt="Volt logo" />
@@ -12,7 +12,7 @@
         </div>
     </nav>
 
-    <nav id="sidebarMenu" class="sidebar d-lg-block bg-gray-800 text-white collapse" data-simplebar>
+    <nav id="sidebarMenu" class="sidebar d-lg-block bg-gray-800 text-white collapse" data-simplebar aria-label="Sidebar">
         <div class="sidebar-inner px-4 pt-3">
             <div
                 class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
@@ -57,8 +57,8 @@
                         <span class="mt-1 ms-1 sidebar-text">Yummy Panel</span>
                     </div>
                 </li>
-                <li class="nav-item  active ">
-                    <a href="{{ Route('panel.dashboard') }}" class="nav-link">
+                <li class="nav-item {{ request()->routeIs('panel.dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('panel.dashboard') }}" class="nav-link">
                         <span class="sidebar-icon">
                             <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -72,7 +72,7 @@
 
                 {{-- Master --}}
                 <li class="nav-item">
-                    <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
+                    <span class="nav-link collapsed d-flex justify-content-between align-items-center"
                         data-bs-toggle="collapse" data-bs-target="#submenu-app">
                         <span>
                             <span class="sidebar-icon">
@@ -94,27 +94,25 @@
                             </svg>
                         </span>
                     </span>
-                    <div class="multi-level collapse " role="list" id="submenu-app" aria-expanded="false">
+
+                    <div class="multi-level collapse {{ request()->routeIs('panel.menu.*', 'panel.chef.*', 'panel.event.*') ? 'show' : '' }}"
+                        role="list" id="submenu-app">
                         <ul class="flex-column nav">
-                            <li class="nav-item ">
-                                <a class="nav-link" href="{{ asset('backend') }}/pages/tables/bootstrap-tables.html">
-                                    <span class="sidebar-text">Menus</span>
+                            <li class="nav-item {{ request()->routeIs('panel.menu.*') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('panel.menu.index') }}">
+                                    <span class="sidebar-text">Menu</span>
                                 </a>
                             </li>
-                        </ul>
 
-                        <ul class="flex-column nav">
-                            <li class="nav-item ">
-                                <a class="nav-link" href="{{ asset('backend') }}/pages/tables/bootstrap-tables.html">
-                                    <span class="sidebar-text">Chefs</span>
+                            <li class="nav-item {{ request()->routeIs('panel.chef.*') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('panel.chef.index') }}">
+                                    <span class="sidebar-text">Chef</span>
                                 </a>
                             </li>
-                        </ul>
 
-                        <ul class="flex-column nav">
-                            <li class="nav-item ">
-                                <a class="nav-link" href="{{ asset('backend') }}/pages/tables/bootstrap-tables.html">
-                                    <span class="sidebar-text">Events</span>
+                            <li class="nav-item {{ request()->routeIs('panel.event.*') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('panel.event.index') }}">
+                                    <span class="sidebar-text">Event</span>
                                 </a>
                             </li>
                         </ul>
@@ -145,27 +143,27 @@
                             </svg>
                         </span>
                     </span>
-                    <div class="multi-level collapse " role="list" id="submenu-gallery" aria-expanded="false">
+
+                    <div class="multi-level collapse {{ request()->routeIs('panel.image.*') ? 'show' : '' }}"
+                        role="list" id="submenu-gallery" >
                         <ul class="flex-column nav">
-                            <li class="nav-item ">
+                            <li class="nav-item {{ request()->routeIs('panel.image.*') ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('panel.image.index') }}">
-                                    <span class="sidebar-text">Images</span>
+                                    <span class="sidebar-text">Image</span>
                                 </a>
                             </li>
-                        </ul>
 
-                        <ul class="flex-column nav">
                             <li class="nav-item ">
                                 <a class="nav-link" href="{{ asset('backend') }}/pages/tables/bootstrap-tables.html">
-                                    <span class="sidebar-text">Videos</span>
+                                    <span class="sidebar-text">Video</span>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </li>
 
-                <li class="nav-item ">
-                    <a href="{{ asset('backend') }}/pages/transactions.html" class="nav-link">
+                <li class="nav-item {{ request()->routeIs('panel.transaction.*') ? 'active' : '' }}">
+                    <a href="{{ route('panel.transaction.index') }}" class="nav-link">
                         <span class="sidebar-icon">
                             <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -179,8 +177,8 @@
                     </a>
                 </li>
 
-                <li class="nav-item ">
-                    <a href="{{ asset('backend') }}/pages/transactions.html" class="nav-link">
+                <li class="nav-item {{ request()->routeIs('panel.review.*') ? 'active' : '' }}">
+                    <a href="{{ route('panel.review.index') }}" class="nav-link">
                         <span class="sidebar-icon">
                             <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -209,6 +207,7 @@
                 </li>
 
                 <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
+
                 <li class="nav-item">
                     <a href="https://themesberg.com/docs/volt-bootstrap-5-dashboard/getting-started/quick-start/"
                         target="_blank" class="nav-link d-flex align-items-center">

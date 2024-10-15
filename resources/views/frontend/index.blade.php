@@ -64,6 +64,7 @@
                     <li><a href="#events">Events</a></li>
                     <li><a href="#chefs">Chefs</a></li>
                     <li><a href="#gallery">Gallery</a></li>
+                    <li><a href="#video">Video</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
                 <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -85,11 +86,16 @@
                         <h1 data-aos="fade-up">Enjoy Your Healthy<br>Delicious Food</h1>
                         <p data-aos="fade-up" data-aos-delay="100">We are team of talented designers making websites
                             with Bootstrap</p>
+                        @php
+                            $firstVideo = $heros->first();
+                        @endphp
                         <div class="d-flex" data-aos="fade-up" data-aos-delay="200">
-                            <a href="#book-a-table" class="btn-get-started">Booka a Table</a>
-                            <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8"
-                                class="glightbox btn-watch-video d-flex align-items-center"><i
-                                    class="bi bi-play-circle"></i><span>Watch Video</span></a>
+                            <a class="btn-get-started pt-3 pb-3" href="#" data-bs-toggle="modal"
+                                data-bs-target="#modalBook">Booka a Table</a>
+                            @if ($firstVideo)
+                                <a href="https://www.youtube.com/embed/{{ $firstVideo->urlEmbedCode }}?rel=0" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span>
+                            </a>
+                        @endif
                         </div>
                     </div>
                     <div class="col-lg-5 order-1 order-lg-2 hero-img" data-aos="zoom-out">
@@ -142,10 +148,16 @@
                                 proident
                             </p>
 
+                            @php
+                                $firstVideos = $abouts->first();
+                            @endphp
                             <div class="position-relative mt-4">
                                 <img src="{{ asset('frontend') }}/img/about-2.jpg" class="img-fluid" alt="">
-                                <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8"
+
+                                @if ($firstVideos)
+                                <a href="https://www.youtube.com/embed/{{ $firstVideos->urlEmbedCode }}?rel=0"
                                     class="glightbox pulsating-play-btn"></a>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -244,8 +256,8 @@
 
                     <div class="col-lg-3 col-md-6">
                         <div class="stats-item text-center w-100 h-100">
-                            <span data-purecounter-start="0" data-purecounter-end="1453"
-                                data-purecounter-duration="1" class="purecounter"></span>
+                            <span data-purecounter-start="0" data-purecounter-end="1453" data-purecounter-duration="1"
+                                class="purecounter"></span>
                             <p>Hours Of Support</p>
                         </div>
                     </div><!-- End Stats Item -->
@@ -267,158 +279,7 @@
         {{-- menu section --}}
         @include('frontend._menu')
 
-        <!-- Testimonials Section -->
-        <section id="testimonials" class="testimonials section light-background">
-
-            <!-- Section Title -->
-            <div class="container section-title" data-aos="fade-up">
-                <h2>TESTIMONIALS</h2>
-                <p>What Are They <span class="description-title">Saying About Us</span></p>
-            </div><!-- End Section Title -->
-
-            <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-                <div class="swiper init-swiper">
-                    <script type="application/json" class="swiper-config">
-            {
-              "loop": true,
-              "speed": 600,
-              "autoplay": {
-                "delay": 5000
-              },
-              "slidesPerView": "auto",
-              "pagination": {
-                "el": ".swiper-pagination",
-                "type": "bullets",
-                "clickable": true
-              }
-            }
-          </script>
-                    <div class="swiper-wrapper">
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <div class="row gy-4 justify-content-center">
-                                    <div class="col-lg-6">
-                                        <div class="testimonial-content">
-                                            <p>
-                                                <i class="bi bi-quote quote-icon-left"></i>
-                                                <span>Proin iaculis purus consequat sem cure digni ssim donec porttitora
-                                                    entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam
-                                                    eget nibh et. Maecen aliquam, risus at semper.</span>
-                                                <i class="bi bi-quote quote-icon-right"></i>
-                                            </p>
-                                            <h3>Saul Goodman</h3>
-                                            <h4>Ceo &amp; Founder</h4>
-                                            <div class="stars">
-                                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                                    class="bi bi-star-fill"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 text-center">
-                                        <img src="{{ asset('frontend') }}/img/testimonials/testimonials-1.jpg"
-                                            class="img-fluid testimonial-img" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- End testimonial item -->
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <div class="row gy-4 justify-content-center">
-                                    <div class="col-lg-6">
-                                        <div class="testimonial-content">
-                                            <p>
-                                                <i class="bi bi-quote quote-icon-left"></i>
-                                                <span>Export tempor illum tamen malis malis eram quae irure esse labore
-                                                    quem cillum quid cillum eram malis quorum velit fore eram velit sunt
-                                                    aliqua noster fugiat irure amet legam anim culpa.</span>
-                                                <i class="bi bi-quote quote-icon-right"></i>
-                                            </p>
-                                            <h3>Sara Wilsson</h3>
-                                            <h4>Designer</h4>
-                                            <div class="stars">
-                                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                                    class="bi bi-star-fill"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 text-center">
-                                        <img src="{{ asset('frontend') }}/img/testimonials/testimonials-2.jpg"
-                                            class="img-fluid testimonial-img" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- End testimonial item -->
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <div class="row gy-4 justify-content-center">
-                                    <div class="col-lg-6">
-                                        <div class="testimonial-content">
-                                            <p>
-                                                <i class="bi bi-quote quote-icon-left"></i>
-                                                <span>Enim nisi quem export duis labore cillum quae magna enim sint
-                                                    quorum nulla quem veniam duis minim tempor labore quem eram duis
-                                                    noster aute amet eram fore quis sint minim.</span>
-                                                <i class="bi bi-quote quote-icon-right"></i>
-                                            </p>
-                                            <h3>Jena Karlis</h3>
-                                            <h4>Store Owner</h4>
-                                            <div class="stars">
-                                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                                    class="bi bi-star-fill"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 text-center">
-                                        <img src="{{ asset('frontend') }}/img/testimonials/testimonials-3.jpg"
-                                            class="img-fluid testimonial-img" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- End testimonial item -->
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <div class="row gy-4 justify-content-center">
-                                    <div class="col-lg-6">
-                                        <div class="testimonial-content">
-                                            <p>
-                                                <i class="bi bi-quote quote-icon-left"></i>
-                                                <span>Fugiat enim eram quae cillum dolore dolor amet nulla culpa multos
-                                                    export minim fugiat minim velit minim dolor enim duis veniam ipsum
-                                                    anim magna sunt elit fore quem dolore labore illum veniam.</span>
-                                                <i class="bi bi-quote quote-icon-right"></i>
-                                            </p>
-                                            <h3>John Larson</h3>
-                                            <h4>Entrepreneur</h4>
-                                            <div class="stars">
-                                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                                    class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i
-                                                    class="bi bi-star-fill"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 text-center">
-                                        <img src="{{ asset('frontend') }}/img/testimonials/testimonials-4.jpg"
-                                            class="img-fluid testimonial-img" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div><!-- End testimonial item -->
-
-                    </div>
-                    <div class="swiper-pagination"></div>
-                </div>
-
-            </div>
-
-        </section><!-- /Testimonials Section -->
+        @include('frontend._testimonial')
 
         {{-- event section --}}
         @include('frontend._event')
@@ -428,6 +289,9 @@
 
         {{-- image section --}}
         @include('frontend._image')
+
+        {{-- video section --}}
+        @include('frontend._video')
 
         {{-- contact section --}}
         @include('frontend._contact')
@@ -544,6 +408,7 @@
                 showConfirmButton: false
             })
         }
+
     </script>
 
 </body>

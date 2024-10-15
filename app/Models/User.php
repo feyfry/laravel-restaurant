@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -44,5 +45,47 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Periksa apakah pengguna memiliki peran tertentu/spesifik role.
+     *
+     * @param string $role
+     * @return bool
+     */
+    public function hasRole($role)
+    {
+        return $this->role === $role;
+    }
+
+    /**
+     * Periksa apakah pengguna memiliki salah satu peran yang diberikan.
+     *
+     * @param array|string $roles
+     * @return bool
+     */
+    public function hasAnyRole($roles)
+    {
+        return in_array($this->role, (array) $roles);
+    }
+
+    /**
+     * Periksa apakah pengguna adalah owner.
+     *
+     * @return bool
+     */
+    public function isOwner()
+    {
+        return $this->hasRole('owner');
+    }
+
+    /**
+     * Periksa apakah pengguna adalah operator.
+     *
+     * @return bool
+     */
+    public function isOperator()
+    {
+        return $this->hasRole('operator');
     }
 }

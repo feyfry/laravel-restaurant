@@ -144,7 +144,7 @@
                         </span>
                     </span>
 
-                    <div class="multi-level collapse {{ request()->routeIs('panel.image.*') ? 'show' : '' }}"
+                    <div class="multi-level collapse {{ request()->routeIs('panel.image.*', 'panel.video.*') ? 'show' : '' }}"
                         role="list" id="submenu-gallery" >
                         <ul class="flex-column nav">
                             <li class="nav-item {{ request()->routeIs('panel.image.*') ? 'active' : '' }}">
@@ -153,8 +153,8 @@
                                 </a>
                             </li>
 
-                            <li class="nav-item ">
-                                <a class="nav-link" href="{{ asset('backend') }}/pages/tables/bootstrap-tables.html">
+                            <li class="nav-item {{ request()->routeIs('panel.video.*') ? 'active' : '' }}">
+                                <a class="nav-link" href="{{ route('panel.video.index') }}">
                                     <span class="sidebar-text">Video</span>
                                 </a>
                             </li>

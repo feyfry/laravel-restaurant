@@ -25,7 +25,7 @@
                         </div>
                         <form method="POST" action="{{ route('login') }}" class="mt-4">
                             @csrf
-                            
+
                             <!-- Form -->
                             <div class="form-group mb-4">
                                 <label for="email">{{ __('Email Address') }}</label>

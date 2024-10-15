@@ -38,35 +38,38 @@
     {{-- table --}}
     <div class="card border-0 shadow mb-4">
         <div class="card-body">
-            <table class="table table-striped">
-                <tr>
-                    <th>Name</th>
-                    <td>: {{ $review->transaction->name }}</td>
-                </tr>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <tr>
+                        <th class="w-25">Name</th>
+                        <td class="w-75 text-break">{{ $review->transaction->name }}</td>
+                    </tr>
 
-                <tr>
-                    <th>Type</th>
-                    <td>: {{ $review->transaction->type }}</td>
-                </tr>
+                    <tr>
+                        <th class="w-25">Type</th>
+                        <td class="w-75 text-break">{{ $review->transaction->type }}</td>
+                    </tr>
 
-                <tr>
-                    <th>Rate</th>
-                    <td>: @for ($i = 0; $i < $review->rate; $i++)
-                            <span class="text-warning">⭐</span>
-                        @endfor
-                    </td>
-                </tr>
+                    <tr>
+                        <th class="w-25">Rate</th>
+                        <td class="w-75">
+                            @for ($i = 0; $i < $review->rate; $i++)
+                                <span class="text-warning">⭐</span>
+                            @endfor
+                        </td>
+                    </tr>
 
-                <tr>
-                    <th>Comment</th>
-                    <td>: {{ $review->comment}}</td>
-                </tr>
+                    <tr>
+                        <th class="w-25">Comment</th>
+                        <td class="w-75 text-break">{{ $review->comment }}</td>
+                    </tr>
 
-                <tr>
-                    <th>Created At</th>
-                    <td>: {{ date('d-m-Y H:i:s', strtotime($review->created_at . ' +7 hours')) }}</td>
-                </tr>
-            </table>
+                    <tr>
+                        <th class="w-25">Created At</th>
+                        <td class="w-75">{{ date('d-m-Y H:i:s', strtotime($review->created_at . ' +7 hours')) }}</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 @endsection

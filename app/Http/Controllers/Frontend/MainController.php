@@ -22,16 +22,30 @@ class MainController extends Controller
             ->where('status', 'active')
             ->get(['name', 'description', 'price', 'image', 'status']);
 
+        $testimonials = DB::table('transactions')
+            ->select('transactions.name', 'transactions.type', 'transactions.file', 'reviews.comment', 'reviews.rate')
+            ->join('reviews', 'transactions.id', '=', 'reviews.transaction_id')
+            ->latest('transactions.created_at')
+            ->where('transactions.status', 'success')
+            ->limit(6)
+            ->get();
+
         $images = DB::table('images')->latest()->get(['name', 'file']);
 
+        $videos = DB::table('videos')->latest()->get(['title', 'urlEmbedCode']);
+
         return view('frontend.index', [
+            'heros' => $videos,
+            'abouts' => $videos,
             'chefs' => $chefs,
             'events' => $events,
             'menu_starter' => $this->getMenu(1),
             'menu_breakfast' => $this->getMenu(2),
             'menu_lunch' => $this->getMenu(3),
             'menu_dinner' => $this->getMenu(4),
-            'images' => $images
+            'testimonials' => $testimonials,
+            'images' => $images,
+            'videos' => $videos
         ]);
     }
 

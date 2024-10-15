@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\Transaction;
-use Illuminate\Http\Request;
 use App\Exports\TransactionExport;
 use App\Http\Controllers\Controller;
 use App\Http\Services\FileService;
 use App\Mail\BookingMailConfirm;
 use App\Models\Review;
+use App\Models\Transaction;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 
 class TransactionController extends Controller
 {
     public function __construct(private FileService $fileService)
-    { }
+    {}
 
     /**
      * Display a listing of the resource.
@@ -25,7 +26,7 @@ class TransactionController extends Controller
         $transactions = Transaction::latest()->paginate(10);
 
         return view('backend.transaction.index', [
-            'transactions' => $transactions
+            'transactions' => $transactions,
         ]);
     }
 
@@ -39,7 +40,7 @@ class TransactionController extends Controller
 
         return view('backend.transaction.show', [
             'transaction' => $transaction,
-            'review' => $review
+            'review' => $review,
         ]);
     }
 
@@ -48,8 +49,12 @@ class TransactionController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        if (!$request->user()->isOperator()) {
+            abort(403, 'Unauthorized action.');
+        }
+
         $data = $request->validate([
-            'status' => 'required|in:pending,success,failed'
+            'status' => 'required|in:pending,success,failed',
         ]);
 
         try {
@@ -72,16 +77,20 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $uuid)
     {
-        $getTransaction = Transaction::where('uuid', $id)->firstOrFail();
+        if (!$request->user()->isOperator()) {
+            abort(403, 'Unauthorized action.');
+        }
 
-        $this->fileService->delete($getTransaction->file);
+        $transaction = Transaction::where('uuid', $uuid)->firstOrFail();
 
-        $getTransaction->delete();
+        $this->fileService->delete($transaction->file);
+
+        $transaction->delete();
 
         return response()->json([
-            'message' => 'Transaction has been deleted'
+            'message' => 'Transaction has been deleted',
         ]);
     }
 
@@ -89,7 +98,7 @@ class TransactionController extends Controller
     {
         $data = $request->validate([
             'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date'
+            'end_date' => 'required|date|after_or_equal:start_date',
         ]);
 
         try {

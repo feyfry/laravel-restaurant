@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Middleware\CheckRole;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\ChefController;
 use App\Http\Controllers\Backend\MenuController;
 use App\Http\Controllers\Backend\EventController;
 use App\Http\Controllers\Backend\ImageController;
+use App\Http\Controllers\Backend\VideoController;
 use App\Http\Controllers\Frontend\MainController;
 use App\Http\Controllers\Backend\ReviewController;
 use App\Http\Controllers\Frontend\BookingController;
@@ -22,24 +24,25 @@ Route::prefix('panel')->middleware('auth')->group(function () {
         return view('backend.dashboard.index');
     })->name('panel.dashboard');
 
-    Route::resource('image', ImageController::class)->names('panel.image');
-
-    Route::resource('menu', MenuController::class)->names('panel.menu');
-
-    Route::resource('chef', ChefController::class)
-        ->except(['show'])
-        ->names('panel.chef');
-
-    Route::resource('event', EventController::class)->names('panel.event');
-
-    Route::resource('review', ReviewController::class)
-    // ->only('index', 'show', 'destroy')
-        ->names('panel.review');
-
+    // Routes untuk kedua role yaitu owner and operator
+    Route::get('transaction', [TransactionController::class, 'index'])->name('panel.transaction.index');
+    Route::get('transaction/{transaction}', [TransactionController::class, 'show'])->name('panel.transaction.show');
     Route::post('transaction/download', [TransactionController::class, 'download'])->name('panel.transaction.download');
-    Route::resource('transaction', TransactionController::class)
-        ->except(['create', 'store', 'edit'])
-        ->names('panel.transaction');
+
+    // Routes hanya untuk operator
+    Route::middleware(CheckRole::class . ':operator')->group(function () {
+        Route::resource('image', ImageController::class)->names('panel.image');
+        Route::resource('video', VideoController::class)->names('panel.video');
+        Route::resource('menu', MenuController::class)->names('panel.menu');
+        Route::resource('chef', ChefController::class)->except(['show'])->names('panel.chef');
+        Route::resource('event', EventController::class)->names('panel.event');
+        Route::resource('review', ReviewController::class)->names('panel.review');
+
+        Route::post('transaction', [TransactionController::class, 'store'])->name('panel.transaction.store');
+        Route::put('transaction/{transaction}', [TransactionController::class, 'update'])->name('panel.transaction.update');
+        Route::delete('transaction/{transaction}', [TransactionController::class, 'destroy'])->name('panel.transaction.destroy');
+    });
+
 });
 
 Auth::routes();

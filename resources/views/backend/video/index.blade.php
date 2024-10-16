@@ -63,7 +63,7 @@
                         <td>{{ $video->slug }}</td>
                         <td>{{ Str::limit($video->description, 50, '...') }}</td>
                         <td>
-                            <iframe width="300" src="https://www.youtube.com/embed/{{ $video->urlEmbedCode }}?rel=0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title=""></iframe>
+                            <img src="https://img.youtube.com/vi/{{ $video->urlEmbedCode }}/0.jpg" class="img-fluid" width="200px" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen title="" alt="">
                         </td>
                         <td>
                             <div class="btn-group">

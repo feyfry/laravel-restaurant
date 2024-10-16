@@ -20,9 +20,7 @@ Route::post('booking', [BookingController::class, 'store'])->name('book.attempt'
 Route::post('review', [FrontReviewController::class, 'store'])->name('review.attempt');
 
 Route::prefix('panel')->middleware('auth')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('backend.dashboard.index');
-    })->name('panel.dashboard');
+    Route::get('/dashboard', [TransactionController::class, 'dashboard'])->name('panel.dashboard');
 
     // Routes untuk kedua role yaitu owner and operator
     Route::get('transaction', [TransactionController::class, 'index'])->name('panel.transaction.index');
@@ -41,7 +39,7 @@ Route::prefix('panel')->middleware('auth')->group(function () {
         Route::post('transaction', [TransactionController::class, 'store'])->name('panel.transaction.store');
         Route::put('transaction/{transaction}', [TransactionController::class, 'update'])->name('panel.transaction.update');
         Route::delete('transaction/{transaction}', [TransactionController::class, 'destroy'])->name('panel.transaction.destroy');
-    });
+    })->middleware('role:operator');
 
 });
 

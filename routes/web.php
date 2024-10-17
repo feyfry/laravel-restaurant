@@ -39,7 +39,7 @@ Route::prefix('panel')->middleware('auth')->group(function () {
         Route::post('transaction', [TransactionController::class, 'store'])->name('panel.transaction.store');
         Route::put('transaction/{transaction}', [TransactionController::class, 'update'])->name('panel.transaction.update');
         Route::delete('transaction/{transaction}', [TransactionController::class, 'destroy'])->name('panel.transaction.destroy');
-    })->middleware('role:operator');
+    });
 
 });
 
